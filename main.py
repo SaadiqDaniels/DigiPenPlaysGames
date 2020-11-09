@@ -1,7 +1,7 @@
 # Import the necessary files and APIs
 import sys
-import discord
-import keyboard
+import discord  # py -m pip install discord
+import keyboard  # py -m pip install keyboard
 import time
 
 # Start defining variables
