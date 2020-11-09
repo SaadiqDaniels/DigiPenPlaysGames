@@ -6,6 +6,46 @@ import time
 
 # Start defining variables
 client = discord.Client()
+keydictionary = {
+    '!up': 'up',
+    '!down': 'down',
+    '!left': 'left',
+    '!right': 'right',
+    '! ': 'space',
+    '!space': 'space',
+    '!shift': 'shift',
+    '!rshift': 'right shift',
+    '!lshift': 'left shift',
+    '!alt': 'alt',
+    '!ralt': 'right alt',
+    '!lalt': 'left alt',
+    '!a': 'a',
+    '!b': 'b',
+    '!c': 'c',
+    '!d': 'd',
+    '!e': 'e',
+    '!f': 'f',
+    '!g': 'g',
+    '!h': 'h',
+    '!i': 'i',
+    '!j': 'j',
+    '!k': 'k',
+    '!l': 'l',
+    '!m': 'm',
+    '!n': 'n',
+    '!o': 'o',
+    '!p': 'p',
+    '!q': 'q',
+    '!r': 'r',
+    '!s': 's',
+    '!t': 't',
+    '!u': 'u',
+    '!v': 'v',
+    '!w': 'w',
+    '!x': 'x',
+    '!y': 'y',
+    '!z': 'z'
+}
 
 
 # Log into discord
@@ -23,37 +63,15 @@ async def on_message(msg):
     if msg.channel.name != sys.argv[2]:
         return
 
-    # Up message commands
-    if msg.content.startswith('!up'):
-        # Send up command
-        await msg.channel.send('UP !')
-        keyboard.press('w')
-        time.sleep(1)
-        keyboard.release('w')
+    if msg.content.startswith('!'):
+        keyboard.press(keydictionary[msg.content])
+        # await msg.channel.send(keydictionary[msg.content])
+        time.sleep(0.25)
+        keyboard.release(keydictionary[msg.content])
 
-    # Down message commands
-    if msg.content.startswith('!down'):
-        # Send up command
-        await msg.channel.send('DOWN !')
-        keyboard.press('s')
-        time.sleep(1)
-        keyboard.release('s')
-
-    # Left message commands
-    if msg.content.startswith('!left'):
-        # Send up command
-        await msg.channel.send('LEFT !')
-        keyboard.press('a')
-        time.sleep(1)
-        keyboard.release('a')
-
-    # Right message commands
-    if msg.content.startswith('!right'):
-        # Send up command
-        await msg.channel.send('right !')
-        keyboard.press('d')
-        time.sleep(1)
-        keyboard.release('d')
+    if msg.content.startswith('$$'):
+        keyboard.write(msg.content[2:])
+        # await msg.channel.send(msg.content[2:])
 
 
 # The real program
