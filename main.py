@@ -6,6 +6,8 @@ import time
 
 # Start defining variables
 client = discord.Client()
+
+# A dictionary of valid key presses
 keydictionary = {
     '!up': 'up',
     '!down': 'down',
@@ -60,22 +62,28 @@ async def on_message(msg):
     if msg.author == client.user:
         return
 
+    # Ignore messages not in the CLI specified channel
     if msg.channel.name != sys.argv[2]:
         return
 
+    # This code will interpret commands that correspond to the keydictionary above.
+    # this does not do any mis-type detection, so it will cause an exception if someone mis-types
     if msg.content.startswith('!'):
         keyboard.press(keydictionary[msg.content])
-        # await msg.channel.send(keydictionary[msg.content])
-        time.sleep(0.25)
+        # If you make this sleep for longer, then a longer key press will happen. I commonly used 0.1 and 0.25
+        time.sleep(0.1)
         keyboard.release(keydictionary[msg.content])
+        # await msg.channel.send(keydictionary[msg.content]) Will echo the message back through discord
 
+    # This code will interpret strings that start with $$,
+    # inputting the entire string of letters into the keyboard system
     if msg.content.startswith('$$'):
         keyboard.write(msg.content[2:])
-        # await msg.channel.send(msg.content[2:])
+        # await msg.channel.send(msg.content[2:]) Will echo the message back through discord
 
 
 # The real program
-if len(sys.argv) == 2:
+if len(sys.argv) != 3:
     print("Incorrect number of arguments given!")
 else:
     client.run(sys.argv[1])
