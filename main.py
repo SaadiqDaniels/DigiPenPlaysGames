@@ -10,9 +10,13 @@ client = discord.Client()
 # A dictionary of valid key presses
 keydictionary = {
     '!up': 'up',
+    '.u': 'up',
     '!down': 'down',
+    '.d': 'down',
     '!left': 'left',
+    '.l': 'left',
     '!right': 'right',
+    '.r': 'right',
     '! ': 'space',
     '!space': 'space',
     '!shift': 'shift',
@@ -49,7 +53,6 @@ keydictionary = {
     '!z': 'z'
 }
 
-
 # Log into discord
 @client.event
 async def on_ready():
@@ -66,21 +69,25 @@ async def on_message(msg):
     if msg.channel.name != sys.argv[2]:
         return
 
-    # This code will interpret commands that correspond to the keydictionary above.
-    # this does not do any mis-type detection, so it will cause an exception if someone mis-types
-    if msg.content.startswith('!'):
-        keyboard.press(keydictionary[msg.content])
-        # If you make this sleep for longer, then a longer key press will happen. I commonly used 0.1 and 0.25
-        time.sleep(0.1)
-        keyboard.release(keydictionary[msg.content])
-        # await msg.channel.send(keydictionary[msg.content]) Will echo the message back through discord
+    # Convert the message to lowercase
+    message = msg.content.lower()
 
-    # This code will interpret strings that start with $$,
-    # inputting the entire string of letters into the keyboard system
-    if msg.content.startswith('$$'):
-        keyboard.write(msg.content[2:])
-        # await msg.channel.send(msg.content[2:]) Will echo the message back through discord
+    # Use space as a delimiter to split multiple commands in the same message
+    commands = message.split(' ')
+    for command in commands:
+        if command.startswith('!') and command in keydictionary.keys():
+            keyboard.press(keydictionary[command])
+            # Wait between pressing and releasing a key
+            time.sleep(0.1)
+            keyboard.release(keydictionary[command])
+            # Echo the message back to discord (useful for debugging)
+            await msg.channel.send(keydictionary[command])
 
+        if command.startswith('$$'):
+            # Send the messages straight to the keyboard to write
+            keyboard.write(command[2:])
+            # Echo the message back to discord (useful for debugging)
+            await msg.channel.send(command[2:])
 
 # The real program
 if len(sys.argv) != 3:
